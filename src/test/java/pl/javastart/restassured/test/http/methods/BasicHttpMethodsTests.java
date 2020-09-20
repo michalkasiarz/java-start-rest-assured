@@ -97,11 +97,14 @@ public class BasicHttpMethodsTests {
         pet.setTags(Collections.singletonList(tag));
         pet.setStatus("available");
 
-        given().log().all().body(pet).contentType("application/json")
+        given().log().all()
+                .contentType("application/json")
+                .body(pet)
                 .when().post(baseURL)
                 .then().log().all().statusCode(200);
 
-        given().log().all().contentType("application/json")
+        given().log().all()
+                .contentType("application/json")
                 .pathParam("petId", pet.getId())
                 .when().delete(baseURL + "/{petId}")
                 .then().log().all().statusCode(200);

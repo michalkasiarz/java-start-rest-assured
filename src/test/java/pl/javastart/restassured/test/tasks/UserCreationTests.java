@@ -22,7 +22,7 @@ public class UserCreationTests {
         user1.setPhone("+123456789");
         user1.setUserStatus("1");
 
-        given().log().uri().log().all()
+        given().log().all()
                 .contentType("application/json")
                 .body(user1)
                 .when().post(baseURL)
