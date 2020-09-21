@@ -5,9 +5,7 @@ import pl.javastart.main.pojo.User;
 
 import static io.restassured.RestAssured.given;
 
-public class UserUpdateTest {
-
-    String baseURL = "https://swaggerpetstore.przyklady.javastart.pl/v2/user";
+public class UserUpdateTest extends BaseTest {
 
     @Test
     public void givenCorrectUserDataWhenFirstNameLastNameAreUpdatedThenUserDataisUpdatedTest() {
@@ -25,7 +23,7 @@ public class UserUpdateTest {
         given().log().all()
                 .contentType("application/json")
                 .body(user)
-                .when().post(baseURL)
+                .when().post("user")
                 .then().log().everything().statusCode(200);
 
         user.setFirstName("Janusz");
@@ -35,13 +33,13 @@ public class UserUpdateTest {
                 .contentType("application/json")
                 .pathParam("username", user.getUserName())
                 .body(user)
-                .when().put(baseURL + "/{username}")
+                .when().put("user/{username}")
                 .then().log().all().statusCode(200);
 
         given().log().all()
                 .contentType("application/json")
                 .pathParam("username", user.getUserName())
-                .when().get(baseURL + "/{username}")
+                .when().get("user/{username}")
                 .then().log().all().statusCode(200);
 
     }

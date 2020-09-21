@@ -1,5 +1,7 @@
 package pl.javastart.restassured.test.http.methods;
 
+import io.restassured.RestAssured;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pl.javastart.main.pojo.Category;
 import pl.javastart.main.pojo.Pet;
@@ -11,13 +13,17 @@ import static io.restassured.RestAssured.given;
 
 public class BasicHttpMethodsTests {
 
-    String baseURL = "https://swaggerpetstore.przyklady.javastart.pl/v2/pet";
+    @BeforeClass
+    public void setupConfiguration() {
+        RestAssured.baseURI = "https://swaggerpetstore.przyklady.javastart.pl";
+        RestAssured.basePath = "v2";
+    }
 
     @Test
     public void givenExistingPetIdWhenGetPetThenReturnPetTest() {
         given().log().uri().log().method()
                 .pathParam("petId", 1)
-                .when().get("https://swaggerpetstore.przyklady.javastart.pl/v2/pet/{petId}")
+                .when().get("pet/{petId}")
                 .then().log().all().statusCode(200);
     }
 
@@ -41,7 +47,7 @@ public class BasicHttpMethodsTests {
 
 
         given().log().all().body(pet).contentType("application/json")
-                .when().post("https://swaggerpetstore.przyklady.javastart.pl/v2/pet")
+                .when().post("pet")
                 .then().log().all().statusCode(200);
     }
 
@@ -64,7 +70,7 @@ public class BasicHttpMethodsTests {
         pet.setStatus("available");
 
         given().log().all().body(pet).contentType("application/json")
-                .when().post(baseURL)
+                .when().post("pet")
                 .then().log().all().statusCode(200);
 
         pet.setId(123);
@@ -74,7 +80,7 @@ public class BasicHttpMethodsTests {
         pet.setStatus("available");
 
         given().log().all().body(pet).contentType("application/json")
-                .when().put(baseURL)
+                .when().put("pet")
                 .then().log().all().statusCode(200);
 
     }
@@ -100,14 +106,13 @@ public class BasicHttpMethodsTests {
         given().log().all()
                 .contentType("application/json")
                 .body(pet)
-                .when().post(baseURL)
+                .when().post("pet")
                 .then().log().all().statusCode(200);
 
         given().log().all()
                 .contentType("application/json")
                 .pathParam("petId", pet.getId())
-                .when().delete(baseURL + "/{petId}")
+                .when().delete("pet/{petId}")
                 .then().log().all().statusCode(200);
-
     }
 }
