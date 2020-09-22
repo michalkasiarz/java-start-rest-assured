@@ -1,6 +1,8 @@
 package pl.javastart.restassured.test.http.methods;
 
 import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pl.javastart.main.pojo.Category;
@@ -17,14 +19,15 @@ public class BasicHttpMethodsTests {
     public void setupConfiguration() {
         RestAssured.baseURI = "https://swaggerpetstore.przyklady.javastart.pl";
         RestAssured.basePath = "v2";
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
     }
 
     @Test
     public void givenExistingPetIdWhenGetPetThenReturnPetTest() {
-        given().log().uri().log().method()
+        given()
                 .pathParam("petId", 1)
                 .when().get("pet/{petId}")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
     }
 
     @Test
@@ -46,9 +49,9 @@ public class BasicHttpMethodsTests {
         pet.setStatus("available");
 
 
-        given().log().all().body(pet).contentType("application/json")
+        given().body(pet).contentType("application/json")
                 .when().post("pet")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
     }
 
     @Test
@@ -69,9 +72,9 @@ public class BasicHttpMethodsTests {
         pet.setTags(Collections.singletonList(tag));
         pet.setStatus("available");
 
-        given().log().all().body(pet).contentType("application/json")
+        given().body(pet).contentType("application/json")
                 .when().post("pet")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
 
         pet.setId(123);
         pet.setCategory(category);
@@ -79,9 +82,9 @@ public class BasicHttpMethodsTests {
         pet.setTags(Collections.singletonList(tag));
         pet.setStatus("available");
 
-        given().log().all().body(pet).contentType("application/json")
+        given().body(pet).contentType("application/json")
                 .when().put("pet")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
 
     }
 
@@ -103,16 +106,16 @@ public class BasicHttpMethodsTests {
         pet.setTags(Collections.singletonList(tag));
         pet.setStatus("available");
 
-        given().log().all()
+        given()
                 .contentType("application/json")
                 .body(pet)
                 .when().post("pet")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
 
-        given().log().all()
+        given()
                 .contentType("application/json")
                 .pathParam("petId", pet.getId())
                 .when().delete("pet/{petId}")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
     }
 }
