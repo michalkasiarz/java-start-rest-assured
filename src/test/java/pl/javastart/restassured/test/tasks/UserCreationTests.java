@@ -20,16 +20,16 @@ public class UserCreationTests extends BaseTest {
         user.setPhone("+123456789");
         user.setUserStatus("1");
 
-        given().log().all()
+        given()
                 .contentType("application/json")
                 .body(user)
                 .when().post("user")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
 
-        given().log().all()
+        given()
                 .contentType("application/json")
                 .pathParam("username", user.getUserName())
                 .when().get("user/{username}")
-                .then().log().all().statusCode(200);
+                .then().statusCode(200);
     }
 }
