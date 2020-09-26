@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 import pl.javastart.main.pojo.User;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class UserCreationTests extends BaseTest {
 
@@ -21,15 +22,13 @@ public class UserCreationTests extends BaseTest {
         user.setUserStatus("1");
 
         given()
-                .contentType("application/json")
                 .body(user)
                 .when().post("user")
-                .then().statusCode(200);
+                .then()
+                .assertThat().body("message", equalTo("445"));
 
         given()
-                .contentType("application/json")
                 .pathParam("username", user.getUserName())
-                .when().get("user/{username}")
-                .then().statusCode(200);
+                .when().get("user/{username}");
     }
 }
